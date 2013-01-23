@@ -1,0 +1,31 @@
+{
+  "devMode": true,
+  "version": "0.1",
+  "name": "UMLGenerator",
+  "identifier": "com.koding.apps.umlgenerator",
+  "path": "~/Applications/UMLGenerator.kdapp",
+  "homepage": "fatihacet.koding.com/umlgenerator",
+  "author": "Fatih Acet",
+  "repository": "git://github.com/fatihacet/umlgenerator.kdapp.git",
+  "description": "UMLGenerator : a Koding application created with the sample template.",
+  "category": "web-app",
+  "source": {
+    "blocks": {
+      "app": {
+        "files": [
+          "helper.js",
+          "./index.coffee"
+        ]
+      }
+    },
+    "stylesheets": [
+      "./resources/style.css"
+    ]
+  },
+  "options": {
+    "type": "tab"
+  },
+  "icns": {
+    "128": "./resources/icon.128.png"
+  }
+}

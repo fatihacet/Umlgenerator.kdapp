@@ -1,0 +1,23 @@
+.uml-generator-header-view {
+  height: 28px !important;
+}
+.uml-generator-header-view > span {
+  float: left;
+}
+.uml-generator-buttons-view {
+  float: right;
+  width: 270px;
+}
+.uml-generator-buttons-view .generate-button {
+  margin: 0 10px;
+}
+.uml-generator-image {
+  padding: 10px;
+}
+.uml-generator-buttons-view .chevron {
+  left: 42px;
+}
+.uml-generator-buttons-view .chevron-separator {
+  left: 42px;
+  height: 23px;
+}
