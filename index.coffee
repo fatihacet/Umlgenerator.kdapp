@@ -11,59 +11,55 @@ class UMLGenerator extends JView
     @header = new KDHeaderView
       cssClass : "uml-generator-header-view"
       type     : "small"
-      title    : "UML Generator"
-    
-    
-    @buttonsView = new KDView
-      cssClass : "uml-generator-buttons-view"
-      
-    
-    @buttonsView.addSubView @resetButton = new KDButtonView
+
+    @header.addSubView @resetButton = new KDButtonView
       title    : "Reset"
-      cssClass : "kdbutton editor-button reset-button"
-      callback : =>
-        @reset()
-        
+      cssClass : "editor-button uml-reset-button"
+      callback : => @reset()
     
-    @buttonsView.addSubView @generateButton = new KDButtonView
+    @header.addSubView @saveCodeButton = new KDButtonView
+      title    : "Save Code"
+      cssClass : "editor-button uml-save-code-button"
+      callback: => @saveCode()
+    
+    @header.addSubView @saveButton = new KDButtonView
+      title    : "Save Output"
+      cssClass : "editor-button uml-save-button"
+      callback : => @saveUML()
+    
+    @header.addSubView @generateButton = new KDButtonView
       title    : "Generate"
-      cssClass : "kdbutton editor-button generate-button"
-      callback : =>
-        @generateUML()
-        
+      cssClass : "editor-button uml-generate-button"
+      callback : => @generateUML()
     
-    @buttonsView.addSubView @saveButton = new KDButtonViewWithMenu
-      cssClass : "editor-button with-menu save-button"
-      title    : "Save"
+    @header.addSubView @samples = new KDButtonViewWithMenu
+      title    : "Sample UML Codes"
+      cssClass : "uml-samples-button editor-button"
+      callback : => @reset()
       menu     : =>
-        "Save UML Code": 
-          callback: =>
-            @saveCode()
-      callback: =>
-        @saveUML()
-        
+        "Hello Koding": ->
+          callback: => @reset()
+        "Skinned Sequence Diagram": 
+          callback: => @openUML getSkinned()
+        "Class Diagram":
+          callback: => @openUML getClass()
     
-    @header.addSubView @buttonsView
-    
-    
+    @header.addSubView @openTip = new KDCustomHTMLView
+      partial     : "?"
+      cssClass    : "editor-button uml-question-mark"
+      tooltip     : 
+        title     : "You can open saved .uml files <br /> by dragging over the editor."
+        placement : "bottom"
+
     @ace = options.ace
-    
     
     @aceView = new KDView
     
-    
-    @UMLImagePath = "http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmWZ4oYnKSSnEhW4mkBXUuGXjTXCBmr9pa_DnKXP9yg9WY0000"
-    
+    @UMLImagePath = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmWZ4oYnKSSnEhW4mkBXUuGXjTXCBmr9pa_DnKXP9yg9WY0000"
     
     @sampleUMLImagePath = @UMLImagePath
     
-    
-    @sampleUMLCode = """
-      Developer -> Koding : Koding is Amazing
-
-      Developer <- Koding : Welcome to Koding!
-    """
-    
+    @sampleUMLCode = getHello()
     
     @umlView = new KDView
       cssClass : "uml-generator-image" 
@@ -71,12 +67,14 @@ class UMLGenerator extends JView
         <img id="uml" src="#{@UMLImagePath}" />
       """
       
-      
+    @umlView.addSubView @loader = new KDLoaderView
+      size    :
+        width : 30
+        
     @baseView = new KDSplitView
       resizable : true
       sizes     : [ "50%", null ]
       views     : [ @aceView, @umlView ]
-      
       
     @aceEditor = @ace.edit @aceView.domElement[0]
     @aceEditor.setTheme "ace/theme/monokai"
@@ -84,35 +82,62 @@ class UMLGenerator extends JView
     @editorSession.setMode  "ace/mode/text"
     @editorSession.setValue @sampleUMLCode
     
+    @baseView.addSubView @dropTarget = new KDView
+      cssClass   : "uml-generator-drop-target"
+      bind       : "dragstart dragend dragover drop dragenter dragleave"
+      
+    @dropTarget.hide()
     
+    @dropTarget.on "drop", (e) =>
+      @open e.originalEvent.dataTransfer.getData "Text"
+      
+    KD.getSingleton("windowController").registerListener
+      KDEventTypes : ["DragEnterOnWindow", "DragExitOnWindow"]
+      listener : @
+      callback : (pubInst, event) =>
+        @dropTarget.show()
+        @dropTarget.hide() if event.type is "drop"
+      
   saveUML: ->
     @openSaveDialog =>
-      filePath = "/Users/#{nickname}/trunk/"
+      filePath = "/Users/#{nickname}/Documents/UMLGenerator"
       fileName = "#{@inputFileName.getValue()}.jpg"
-      @doKiteRequest """cd #{filePath} ; curl -o "#{fileName}" #{@UMLImagePath}""", (res) =>
+      @doKiteRequest """mkdir -p #{filePath} ; cd #{filePath} ; curl -o "#{fileName}" #{@UMLImagePath}""", (res) =>
         new KDNotificationView
           type  : "mini"
           title : "Your UML diagram has been saved!"
       @saveDialog.hide()
       
-      
   saveCode: ->
     @openSaveDialog =>
-      filePath = "/Users/#{nickname}/trunk/"
+      filePath = "/Users/#{nickname}/Documents/UMLGenerator"
       fileName = "#{@inputFileName.getValue()}.uml"
-      @doKiteRequest """cd #{filePath} ; echo #{FSHelper.escapeFilePath @editorSession.getValue()} > #{fileName}""", (res) =>
+      @doKiteRequest """mkdir -p #{filePath} ; cd #{filePath} ; echo #{FSHelper.escapeFilePath @editorSession.getValue()} > #{fileName}""", (res) =>
         new KDNotificationView
           type  : "mini"
           title : "Your UML code has been saved!"
         @saveDialog.hide()
-        
         
   reset: ->
     @editorSession.setValue @sampleUMLCode
     document.getElementById("uml").setAttribute "src", @sampleUMLImagePath
     @UMLImagePath = @sampleUMLImagePath
     
-    
+  open: (path) ->
+    ext = KD.utils.getFileExtension path
+    if ext isnt "uml"
+      return new KDNotificationView
+        title    : "Dropped item must have .uml extension"
+        duration : 3000
+        type     : "mini"
+    else 
+      @doKiteRequest "cat #{path}", (res) =>
+        @openUML res
+        
+  openUML: (umlCode) ->
+    @editorSession.setValue umlCode
+    @generateUML()
+      
   openSaveDialog: (callback) ->
     @addSubView @saveDialog = saveDialog = new KDDialogView
       cssClass      : "save-as-dialog"
@@ -136,7 +161,7 @@ class UMLGenerator extends JView
     wrapper.addSubView form = new KDFormView
 
     form.addSubView labelFileName = new KDLabelView
-      title : "Filename:"
+      title : "Filename: (file will be saved into ~/Documents/UMLGenerator/)"
 
     form.addSubView @inputFileName = inputFileName = new KDInputView
       label        : labelFileName
@@ -145,16 +170,19 @@ class UMLGenerator extends JView
     saveDialog.show()
     inputFileName.setFocus()
   
-    
   generateUML: ->
-    timestamp = +new Date()
-    value     = "#{FSHelper.escapeFilePath @editorSession.getValue()}"
+    @loader.show()
+    @umlView.addSubView @loaderView = new KDView
+      cssClass : "uml-generator-loader-view"
     
-    @doKiteRequest "cd /Users/#{nickname}/Applications/UMLGenerator.kdapp ; php uml-gen.php #{value}", (res) =>
+    @doKiteRequest "curl -d img='#{@editorSession.getValue()}' https://fatihacet.koding.com/.applications/umlgenerator/resources/uml-gen.php", (res) =>
       document.getElementById("uml").setAttribute "src", res
+        
       @UMLImagePath = res
+      KD.utils.wait 1000, => 
+        @loader.hide()
+        @loaderView.destroy()
     
-  
   doKiteRequest: (command, callback) ->
     KD.getSingleton('kiteController').run command, (err, res) =>
       unless err
@@ -163,8 +191,7 @@ class UMLGenerator extends JView
         new KDNotificationView
           title    : "An error occured while processing your request, try again please!"
           duration : 3000
-  
-    
+          
   pistachio: ->
     """
       {{> @header }}

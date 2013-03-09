@@ -1,23 +1,10 @@
-.uml-generator-header-view {
-  height: 28px !important;
-}
-.uml-generator-header-view > span {
-  float: left;
-}
-.uml-generator-buttons-view {
-  float: right;
-  width: 270px;
-}
-.uml-generator-buttons-view .generate-button {
-  margin: 0 10px;
-}
-.uml-generator-image {
-  padding: 10px;
-}
-.uml-generator-buttons-view .chevron {
-  left: 42px;
-}
-.uml-generator-buttons-view .chevron-separator {
-  left: 42px;
-  height: 23px;
-}
+.uml-generator-header-view { height: 28px !important; }
+.uml-generator-header-view .uml-generate-button { margin: 0 10px; }
+.uml-generator-image img { padding: 10px; position: absolute; }
+.uml-generator-drop-target, .uml-generator-loader-view { position: absolute; background: #000; opacity: 0.6; z-index: 500; }
+.uml-question-mark { position: relative; top: -25px; left: -260px; width: 20px; }
+.uml-generate-button, .uml-samples-button, .uml-question-mark { float: right; }
+.uml-reset-button, .uml-save-code-button { margin-right: 10px; }
+.uml-generator-header-view .chevron { right: -11px !important; }
+.uml-generator-header-view .chevron-separator { right: 9px !important; height: 24px; }
+.uml-generator .kdloader { position: absolute; top: 50%; left: 50%; margin: -15px 0 0 15px; z-index: 501; }

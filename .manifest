@@ -7,13 +7,13 @@
   "homepage": "fatihacet.koding.com/umlgenerator",
   "author": "Fatih Acet",
   "repository": "git://github.com/fatihacet/umlgenerator.kdapp.git",
-  "description": "UMLGenerator : a Koding application created with the sample template.",
+  "description": "UMLGenerator",
   "category": "web-app",
   "source": {
     "blocks": {
       "app": {
         "files": [
-          "helper.js",
+          "./uml-samples.coffee",
           "./index.coffee"
         ]
       }

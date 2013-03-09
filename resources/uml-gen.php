@@ -56,9 +56,10 @@ function encode64($c) {
      return $str; 
 } 
 
-$path = "http://www.plantuml.com/plantuml/img/"; 
-$path .= encodep($argv[1]); 
-echo $path;
+$path = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/"; 
 
+$path .= encodep($_POST['img']); 
+
+echo $path;
 
 ?> 
