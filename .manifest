@@ -26,6 +26,8 @@
     "type": "tab"
   },
   "icns": {
-    "128": "./resources/icon.128.png"
+    "128": "./resources/icon.128.png",
+    "160": "./resources/icon.160.png",
+    "256": "./resources/icon.256.png"
   }
 }
