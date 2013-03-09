@@ -1,4 +1,4 @@
-// Compiled by Koding Servers at Fri Mar 08 2013 18:56:38 GMT-0800 (PST) in server time
+// Compiled by Koding Servers at Fri Mar 08 2013 19:44:00 GMT-0800 (PST) in server time
 
 (function() {
 
@@ -169,7 +169,7 @@ UMLGenerator = (function(_super) {
         return new KDNotificationView({
           type: "mini",
           title: "Your UML diagram has been saved!"
-        });
+        }, _this.openFolders());
       });
       return _this.saveDialog.hide();
     });
@@ -185,7 +185,7 @@ UMLGenerator = (function(_super) {
         new KDNotificationView({
           type: "mini",
           title: "Your UML code has been saved!"
-        });
+        }, _this.openFolders());
         return _this.saveDialog.hide();
       });
     });
@@ -271,6 +271,20 @@ UMLGenerator = (function(_super) {
         _this.loader.hide();
         return _this.loaderView.destroy();
       });
+    });
+  };
+
+  UMLGenerator.prototype.openFolders = function() {
+    var docRoot, files, finderController, root,
+      _this = this;
+    root = "/Users/" + nickname;
+    docRoot = root + "/Documents";
+    files = [root, docRoot, "" + docRoot + "/UMLGenerator"];
+    finderController = KD.getSingleton('finderController');
+    return finderController.multipleLs(files, function(err, res) {
+      var fsItems;
+      fsItems = FSHelper.parseLsOutput(files, res);
+      return finderController.treeController.addNodes(fsItems);
     });
   };
 

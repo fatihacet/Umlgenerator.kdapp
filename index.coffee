@@ -106,6 +106,7 @@ class UMLGenerator extends JView
         new KDNotificationView
           type  : "mini"
           title : "Your UML diagram has been saved!"
+          @openFolders()
       @saveDialog.hide()
       
   saveCode: ->
@@ -116,6 +117,7 @@ class UMLGenerator extends JView
         new KDNotificationView
           type  : "mini"
           title : "Your UML code has been saved!"
+          @openFolders()
         @saveDialog.hide()
         
   reset: ->
@@ -182,6 +184,17 @@ class UMLGenerator extends JView
       KD.utils.wait 1000, => 
         @loader.hide()
         @loaderView.destroy()
+        
+  openFolders: ->
+    root    = "/Users/#{nickname}"
+    docRoot = root + "/Documents"
+    
+    files = [root, docRoot, "#{docRoot}/UMLGenerator"]
+
+    finderController = KD.getSingleton('finderController')
+    finderController.multipleLs files, (err, res) =>
+      fsItems = FSHelper.parseLsOutput files, res
+      finderController.treeController.addNodes fsItems
     
   doKiteRequest: (command, callback) ->
     KD.getSingleton('kiteController').run command, (err, res) =>
