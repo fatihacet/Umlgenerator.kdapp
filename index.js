@@ -1,4 +1,4 @@
-// Compiled by Koding Servers at Fri Mar 08 2013 20:08:28 GMT-0800 (PST) in server time
+// Compiled by Koding Servers at Sat Mar 09 2013 23:57:31 GMT-0800 (PST) in server time
 
 (function() {
 
@@ -6,18 +6,30 @@
 
 /* BLOCK STARTS /Source: /Users/fatihacet/Applications/UMLGenerator.kdapp/uml-samples.coffee */
 
-var getClass, getHello, getSkinned;
-
-getSkinned = function() {
-  return "skinparam backgroundColor #EEEBDC\n\nskinparam sequence {\n  ArrowColor DeepSkyBlue\n  ActorBorderColor DeepSkyBlue\n  LifeLineBorderColor blue\n  LifeLineBackgroundColor #A9DCDF\n  \n  ParticipantBorderColor DeepSkyBlue\n  ParticipantBackgroundColor DodgerBlue\n  ParticipantFontName Impact\n  ParticipantFontSize 17\n  ParticipantFontColor #A9DCDF\n  \n  ActorBackgroundColor aqua\n  ActorFontColor DeepSkyBlue\n  ActorFontSize 17\n  ActorFontName Aapex\n}\n\nactor User\nparticipant \"First Class\" as A\nparticipant \"Second Class\" as B\nparticipant \"Last Class\" as C\n\nUser -> A: DoWork\nactivate A\n\nA -> B: Create Request\nactivate B\n\nB -> C: DoWork\nactivate C\nC --> B: WorkDone\ndestroy C\n\nB --> A: Request Created\ndeactivate B\n\nA --> User: Done\ndeactivate A";
-};
+var getActivity, getClass, getHello, getSequence, getState, getUseCase;
 
 getHello = function() {
-  return "Developer -> Koding : Koding is Amazing\n\nDeveloper <- Koding : Welcome to Koding!";
+  return "  Developer -> Koding : Hello Koding\n\n  Developer <- Koding : Welcome to Koding\n  \n  Developer -> Friend : Join to awesome Koding\n  \n  Friend    -> Koding : Hello Koding\n  \n  Friend    <- Koding : Welcome to Koding\n  \n  Developer <- Friend : Awesome Koding is awesome";
+};
+
+getSequence = function() {
+  return "skinparam backgroundColor #EEEBDC\n\nskinparam sequence {\n  ArrowColor DeepSkyBlue\n  ActorBorderColor DeepSkyBlue\n  LifeLineBorderColor blue\n  LifeLineBackgroundColor #A9DCDF\n  \n  ParticipantBorderColor DeepSkyBlue\n  ParticipantBackgroundColor DodgerBlue\n  ParticipantFontName Impact\n  ParticipantFontSize 17\n  ParticipantFontColor #A9DCDF\n  \n  ActorBackgroundColor aqua\n  ActorFontColor DeepSkyBlue\n  ActorFontSize 17\n  ActorFontName Aapex\n}\n\nactor User\nparticipant \"First Class\" as A\nparticipant \"Second Class\" as B\nparticipant \"Last Class\" as C\n\nUser -> A: DoWork\nactivate A\n\nA -> B: Create Request\nactivate B\n\nB -> C: DoWork\nactivate C\nC --> B: WorkDone\ndestroy C\n\nB --> A: Request Created\ndeactivate B\n\nA --> User: Done\ndeactivate A";
 };
 
 getClass = function() {
   return "abstract class AbstractList\nabstract AbstractCollection\ninterface List\ninterface Collection\n\nList <|-- AbstractList\nCollection <|-- AbstractCollection\n\nCollection <|- List\nAbstractCollection <|- AbstractList\nAbstractList <|-- ArrayList\n\nclass ArrayList {\n  Object[] elementData\n  size()\n}\n\nenum TimeUnit {\n  DAYS\n  HOURS\n  MINUTES\n}";
+};
+
+getActivity = function() {
+  return "title Servlet Container\n\n(*) --> \"ClickServlet.handleRequest()\"\n--> \"new Page\"\n\nif \"Page.onSecurityCheck\" then\n  ->[true] \"Page.onInit()\"\n  \n  if \"isForward?\" then\n   ->[no] \"Process controls\"\n   \n   if \"continue processing?\" then\n     -->[yes] ===RENDERING===\n   else\n     -->[no] ===REDIRECT_CHECK===\n   endif\n   \n  else\n   -->[yes] ===RENDERING===\n  endif\n  \n  if \"is Post?\" then\n    -->[yes] \"Page.onPost()\"\n    --> \"Page.onRender()\" as render\n    --> ===REDIRECT_CHECK===\n  else\n    -->[no] \"Page.onGet()\"\n    --> render\n  endif\n  \nelse\n  -->[false] ===REDIRECT_CHECK===\nendif\n\nif \"Do redirect?\" then\n ->[yes] \"redirect request\"\n --> ==BEFORE_DESTROY===\nelse\n if \"Do Forward?\" then\n  -left->[yes] \"Forward request\"\n  --> ==BEFORE_DESTROY===\n else\n  -right->[no] \"Render page template\"\n  --> ==BEFORE_DESTROY===\n endif\nendif\n\n--> \"Page.onDestroy()\"\n-->(*)";
+};
+
+getUseCase = function() {
+  return "left to right direction\nskinparam packageStyle rect\nactor customer\nactor clerk\nrectangle checkout {\n  customer -- (checkout)\n  (checkout) .> (payment) : include\n  (help) .> (checkout) : extends\n  (checkout) -- clerk\n}";
+};
+
+getState = function() {
+  return "scale 600 width\n\n[*] -> State1\nState1 --> State2 : Succeeded\nState1 --> [*] : Aborted\nState2 --> State3 : Succeeded\nState2 --> [*] : Aborted\nstate State3 {\n  state \"Long State Name\" as long1\n  long1 : Just a test\n  [*] --> long1\n  long1 --> long1 : New Data\n  long1 --> ProcessData : Enough Data\n}\nState3 --> State3 : Failed\nState3 --> [*] : Succeeded / Save Result\nState3 --> [*] : Aborted";
 };
 
 
@@ -94,14 +106,29 @@ UMLGenerator = (function(_super) {
               }
             };
           },
-          "Skinned Sequence Diagram": {
+          "Sequence Diagram (skinned)": {
             callback: function() {
-              return _this.openUML(getSkinned());
+              return _this.openUML(getSequence());
             }
           },
           "Class Diagram": {
             callback: function() {
               return _this.openUML(getClass());
+            }
+          },
+          "Activity Diagram": {
+            callback: function() {
+              return _this.openUML(getActivity());
+            }
+          },
+          "Use Case Diagram": {
+            callback: function() {
+              return _this.openUML(getUseCase());
+            }
+          },
+          "State Diagram": {
+            callback: function() {
+              return _this.openUML(getState());
             }
           }
         };
@@ -117,7 +144,7 @@ UMLGenerator = (function(_super) {
     }));
     this.ace = options.ace;
     this.aceView = new KDView;
-    this.UMLImagePath = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmWZ4oYnKSSnEhW4mkBXUuGXjTXCBmr9pa_DnKXP9yg9WY0000";
+    this.UMLImagePath = "https://api.koding.com/1.0/image.php?url=https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00";
     this.sampleUMLImagePath = this.UMLImagePath;
     this.sampleUMLCode = getHello();
     this.umlView = new KDView({
@@ -168,7 +195,8 @@ UMLGenerator = (function(_super) {
       _this.doKiteRequest("mkdir -p " + filePath + " ; cd " + filePath + " ; curl -o \"" + fileName + "\" " + _this.UMLImagePath, function(res) {
         return new KDNotificationView({
           type: "mini",
-          title: "Your UML diagram has been saved!"
+          title: "Your UML diagram has been saved!",
+          cssClass: "success"
         }, _this.openFolders());
       });
       return _this.saveDialog.hide();
@@ -184,6 +212,7 @@ UMLGenerator = (function(_super) {
       return _this.doKiteRequest("mkdir -p " + filePath + " ; cd " + filePath + " ; echo " + (FSHelper.escapeFilePath(_this.editorSession.getValue())) + " > " + fileName, function(res) {
         new KDNotificationView({
           type: "mini",
+          cssClass: "success",
           title: "Your UML code has been saved!"
         }, _this.openFolders());
         return _this.saveDialog.hide();
@@ -203,9 +232,10 @@ UMLGenerator = (function(_super) {
     ext = KD.utils.getFileExtension(path);
     if (ext !== "uml") {
       return new KDNotificationView({
+        type: "mini",
+        cssClass: "error",
         title: "Dropped item must have .uml extension",
-        duration: 3000,
-        type: "mini"
+        duration: 3000
       });
     } else {
       return this.doKiteRequest("cat " + path, function(res) {
@@ -252,7 +282,7 @@ UMLGenerator = (function(_super) {
     }));
     form.addSubView(this.inputFileName = inputFileName = new KDInputView({
       label: labelFileName,
-      defaultValue: "sample-uml"
+      defaultValue: "my-uml"
     }));
     saveDialog.show();
     return inputFileName.setFocus();
@@ -298,6 +328,8 @@ UMLGenerator = (function(_super) {
       } else {
         return new KDNotificationView({
           title: "An error occured while processing your request, try again please!",
+          type: "mini",
+          cssClass: "error",
           duration: 3000
         });
       }
