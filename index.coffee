@@ -1,58 +1,33 @@
-KD.enableLogs()
-
 {nickname}  = KD.whoami().profile
 
 class UMLGenerator extends JView
-  constructor: (options = {}) ->
+  constructor: (options = {}, data) ->
     options.cssClass = "uml-generator"
     
-    super options
+    super options, data
     
-    @header = new KDHeaderView
+    @header = new KDView
       cssClass : "uml-generator-header-view"
-      type     : "small"
 
-    @header.addSubView @resetButton = new KDButtonView
+    @header.addSubView resetButton = new KDButtonView
       title    : "Reset"
       cssClass : "editor-button uml-reset-button"
       callback : => @reset()
     
-    @header.addSubView @saveCodeButton = new KDButtonView
+    @header.addSubView saveCodeButton = new KDButtonView
       title    : "Save Code"
       cssClass : "editor-button uml-save-code-button"
       callback: => @saveCode()
-    
-    @header.addSubView @saveButton = new KDButtonView
+      
+    @header.addSubView saveButton = new KDButtonView
       title    : "Save Output"
       cssClass : "editor-button uml-save-button"
       callback : => @saveUML()
+      
+    @header.addSubView headerRight = new KDView
+      cssClass : "uml-generator-header-right"
     
-    @header.addSubView @generateButton = new KDButtonView
-      title    : "Generate"
-      cssClass : "editor-button uml-generate-button"
-      callback : => @generateUML()
-    
-    @header.addSubView @samples = new KDButtonViewWithMenu
-      title    : "Sample UML Codes"
-      cssClass : "uml-samples-button editor-button"
-      callback : => @reset()
-      menu     : =>
-        "Hello Koding": 
-          callback: => @reset()
-        "Sequence Diagram (skinned)": 
-          callback: => @openUML getSequence()
-        "Class Diagram":
-          callback: => @openUML getClass()
-        "Activity Diagram": 
-          callback: => @openUML getActivity()
-        "Use Case Diagram":
-          callback: => @openUML getUseCase()
-        "State Diagram":
-          callback: => @openUML getState()
-        "Scientific Chart": 
-          callback: => @openUML getChart()
-    
-    @header.addSubView @openTip = new KDCustomHTMLView
+    headerRight.addSubView about = new KDCustomHTMLView
       partial     : ""
       cssClass    : "editor-button uml-question-mark"
       click       : =>
@@ -76,12 +51,37 @@ class UMLGenerator extends JView
             You can try sample UML codes by using "Sample UML Diagrams" menu button.</p>
             <p>Feel free to fork and contribute on Github. <a href="http://d.pr/qQDn">Here</a> is the Github repo of the application.</p>
           """
-
+          
+    headerRight.addSubView samples = new KDButtonViewWithMenu
+      title    : "Sample UML Codes"
+      cssClass : "uml-samples-button editor-button"
+      callback : => @reset()
+      menu     : =>
+        "Hello Koding": 
+          callback: => @reset()
+        "Sequence Diagram (skinned)": 
+          callback: => @openUML getSequence()
+        "Class Diagram":
+          callback: => @openUML getClass()
+        "Activity Diagram": 
+          callback: => @openUML getActivity()
+        "Use Case Diagram":
+          callback: => @openUML getUseCase()
+        "State Diagram":
+          callback: => @openUML getState()
+        "Scientific Chart": 
+          callback: => @openUML getChart()
+    
+    headerRight.addSubView generateButton = new KDButtonView
+      title    : "Generate"
+      cssClass : "editor-button uml-generate-button"
+      callback : => @generateUML()
+    
     @ace = options.ace
     
     @aceView = new KDView
     
-    @UMLImagePath = "https://api.koding.com/1.0/image.php?url=https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00"
+    @UMLImagePath = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00"
     
     @sampleUMLImagePath = @UMLImagePath
     
@@ -216,6 +216,8 @@ class UMLGenerator extends JView
       cssClass : "uml-generator-loader-view"
     
     @doKiteRequest "curl -d img='#{@editorSession.getValue()}' https://fatihacet.koding.com/.applications/umlgenerator/resources/uml-gen.php", (res) =>
+      
+    @doKiteRequest "https://app.koding.com/fatihacet/UMLGenerator/latest/resources/uml-gen.php", (res) =>
       document.getElementById("uml").setAttribute "src", res
         
       @UMLImagePath = res
@@ -245,6 +247,8 @@ class UMLGenerator extends JView
           type     : "mini"
           cssClass : "error"
           duration : 3000
+        @loader?.hide()
+        @loaderView?.destroy()
           
   pistachio: ->
     """
