@@ -215,9 +215,7 @@ class UMLGenerator extends JView
     @umlView.addSubView @loaderView = new KDView
       cssClass : "uml-generator-loader-view"
     
-    @doKiteRequest "curl -d img='#{@editorSession.getValue()}' https://fatihacet.koding.com/.applications/umlgenerator/resources/uml-gen.php", (res) =>
-      
-    @doKiteRequest "https://app.koding.com/fatihacet/UMLGenerator/latest/resources/uml-gen.php", (res) =>
+    @doKiteRequest "curl -d img='#{@editorSession.getValue()}' https://acet.koding.com/.applications/umlgenerator/resources/uml-gen.php", (res) =>
       document.getElementById("uml").setAttribute "src", res
         
       @UMLImagePath = res
