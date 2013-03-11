@@ -1,5 +1,5 @@
 {
-  "devMode": true,
+  "devMode": false,
   "version": "0.1",
   "name": "UMLGenerator",
   "identifier": "com.koding.apps.umlgenerator",
