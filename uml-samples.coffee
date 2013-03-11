@@ -1,16 +1,18 @@
 getHello = ->
   """
-    Developer -> Koding : Hello Koding
-  
-    Developer <- Koding : Welcome to Koding
+    Koding -> Developer : Welcome to Koding
     
-    Developer -> Friend : Join to awesome Koding
+    Koding <- Developer : Hello Koding
     
-    Friend    -> Koding : Hello Koding
+    Developer -> Friend : Did you see Koding?
     
-    Friend    <- Koding : Welcome to Koding
+    Friend -> Koding : Hello Koding
     
-    Developer <- Friend : Awesome Koding is awesome
+    Friend <- Koding : Welcome to Koding
+    
+    Developer <- Friend : Koding is awesome
+    
+    Developer -> Friend : Yes, indeed.
   """
 
 getSequence = ->

@@ -103,14 +103,20 @@ class UMLGenerator extends JView
       views     : [ @aceView, @umlView ]
       
     @aceEditor = @ace.edit @aceView.domElement[0]
-    @aceEditor.setTheme "ace/theme/monokai"
     @editorSession = @aceEditor.getSession()
     @editorSession.setMode  "ace/mode/text"
+    @aceEditor.setTheme     "ace/theme/monokai"
     @editorSession.setValue @sampleUMLCode
+    @aceEditor.commands.addCommand 
+      name      : "find"
+      bindKey   : 
+        win     : 'Ctrl-S'
+        mac     : 'Command-S'
+      exec      : => @generateUML()
     
     @baseView.addSubView @dropTarget = new KDView
-      cssClass   : "uml-generator-drop-target"
-      bind       : "dragstart dragend dragover drop dragenter dragleave"
+      cssClass  : "uml-generator-drop-target"
+      bind      : "dragstart dragend dragover drop dragenter dragleave"
       
     @dropTarget.hide()
     
@@ -126,8 +132,9 @@ class UMLGenerator extends JView
       
   saveUML: ->
     @openSaveDialog =>
-      filePath = "/Users/#{nickname}/Documents/UMLGenerator"
-      fileName = "#{@inputFileName.getValue()}.jpg"
+      filePath           = "/Users/#{nickname}/Documents/UMLGenerator"
+      fileName           = "#{@inputFileName.getValue()}.jpg"
+      @lastSavedFilePath = filePath + "/" + fileName
       @doKiteRequest """mkdir -p #{filePath} ; cd #{filePath} ; curl -o "#{fileName}" #{@UMLImagePath}""", (res) =>
         new KDNotificationView
           type     : "mini"
@@ -138,8 +145,9 @@ class UMLGenerator extends JView
       
   saveCode: ->
     @openSaveDialog =>
-      filePath = "/Users/#{nickname}/Documents/UMLGenerator"
-      fileName = "#{@inputFileName.getValue()}.uml"
+      filePath           = "/Users/#{nickname}/Documents/UMLGenerator"
+      fileName           = "#{@inputFileName.getValue()}.uml"
+      @lastSavedFilePath = filePath + "/" + fileName
       @doKiteRequest """mkdir -p #{filePath} ; cd #{filePath} ; echo #{FSHelper.escapeFilePath @editorSession.getValue()} > #{fileName}""", (res) =>
         new KDNotificationView
           type     : "mini"
@@ -216,15 +224,16 @@ class UMLGenerator extends JView
         @loaderView.destroy()
         
   openFolders: ->
-    root    = "/Users/#{nickname}"
-    docRoot = root + "/Documents"
-    
-    files = [root, docRoot, "#{docRoot}/UMLGenerator"]
+    root     = "/Users/#{nickname}"
+    docRoot  = "#{root}/Documents"
+    files    = [root, docRoot, "#{docRoot}/UMLGenerator"]
 
     finderController = KD.getSingleton('finderController')
+    {treeController} = finderController
     finderController.multipleLs files, (err, res) =>
       fsItems = FSHelper.parseLsOutput files, res
-      finderController.treeController.addNodes fsItems
+      treeController.addNodes fsItems
+      treeController.selectNode treeController.nodes[@lastSavedFilePath]
     
   doKiteRequest: (command, callback) ->
     KD.getSingleton('kiteController').run command, (err, res) =>

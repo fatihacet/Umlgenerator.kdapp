@@ -1,4 +1,4 @@
-// Compiled by Koding Servers at Mon Mar 11 2013 11:32:35 GMT-0700 (PDT) in server time
+// Compiled by Koding Servers at Mon Mar 11 2013 12:03:13 GMT-0700 (PDT) in server time
 
 (function() {
 
@@ -9,7 +9,7 @@
 var getActivity, getChart, getClass, getHello, getSequence, getState, getUseCase;
 
 getHello = function() {
-  return "  Developer -> Koding : Hello Koding\n\n  Developer <- Koding : Welcome to Koding\n  \n  Developer -> Friend : Join to awesome Koding\n  \n  Friend    -> Koding : Hello Koding\n  \n  Friend    <- Koding : Welcome to Koding\n  \n  Developer <- Friend : Awesome Koding is awesome";
+  return "Koding -> Developer : Welcome to Koding\n\nKoding <- Developer : Hello Koding\n\nDeveloper -> Friend : Did you see Koding?\n\nFriend -> Koding : Hello Koding\n\nFriend <- Koding : Welcome to Koding\n\nDeveloper <- Friend : Koding is awesome\n\nDeveloper -> Friend : Yes, indeed.";
 };
 
 getSequence = function() {
@@ -172,10 +172,20 @@ UMLGenerator = (function(_super) {
       views: [this.aceView, this.umlView]
     });
     this.aceEditor = this.ace.edit(this.aceView.domElement[0]);
-    this.aceEditor.setTheme("ace/theme/monokai");
     this.editorSession = this.aceEditor.getSession();
     this.editorSession.setMode("ace/mode/text");
+    this.aceEditor.setTheme("ace/theme/monokai");
     this.editorSession.setValue(this.sampleUMLCode);
+    this.aceEditor.commands.addCommand({
+      name: "find",
+      bindKey: {
+        win: 'Ctrl-S',
+        mac: 'Command-S'
+      },
+      exec: function() {
+        return _this.generateUML();
+      }
+    });
     this.baseView.addSubView(this.dropTarget = new KDView({
       cssClass: "uml-generator-drop-target",
       bind: "dragstart dragend dragover drop dragenter dragleave"
@@ -202,6 +212,7 @@ UMLGenerator = (function(_super) {
       var fileName, filePath;
       filePath = "/Users/" + nickname + "/Documents/UMLGenerator";
       fileName = "" + (_this.inputFileName.getValue()) + ".jpg";
+      _this.lastSavedFilePath = filePath + "/" + fileName;
       _this.doKiteRequest("mkdir -p " + filePath + " ; cd " + filePath + " ; curl -o \"" + fileName + "\" " + _this.UMLImagePath, function(res) {
         return new KDNotificationView({
           type: "mini",
@@ -219,6 +230,7 @@ UMLGenerator = (function(_super) {
       var fileName, filePath;
       filePath = "/Users/" + nickname + "/Documents/UMLGenerator";
       fileName = "" + (_this.inputFileName.getValue()) + ".uml";
+      _this.lastSavedFilePath = filePath + "/" + fileName;
       return _this.doKiteRequest("mkdir -p " + filePath + " ; cd " + filePath + " ; echo " + (FSHelper.escapeFilePath(_this.editorSession.getValue())) + " > " + fileName, function(res) {
         new KDNotificationView({
           type: "mini",
@@ -315,16 +327,18 @@ UMLGenerator = (function(_super) {
   };
 
   UMLGenerator.prototype.openFolders = function() {
-    var docRoot, files, finderController, root,
+    var docRoot, files, finderController, root, treeController,
       _this = this;
     root = "/Users/" + nickname;
-    docRoot = root + "/Documents";
+    docRoot = "" + root + "/Documents";
     files = [root, docRoot, "" + docRoot + "/UMLGenerator"];
     finderController = KD.getSingleton('finderController');
+    treeController = finderController.treeController;
     return finderController.multipleLs(files, function(err, res) {
       var fsItems;
       fsItems = FSHelper.parseLsOutput(files, res);
-      return finderController.treeController.addNodes(fsItems);
+      treeController.addNodes(fsItems);
+      return treeController.selectNode(treeController.nodes[_this.lastSavedFilePath]);
     });
   };
 
