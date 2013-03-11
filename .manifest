@@ -29,5 +29,11 @@
     "128": "./resources/icon.128.png",
     "160": "./resources/icon.160.png",
     "256": "./resources/icon.256.png"
-  }
+  },
+  "screenshots": [
+    "./resources/screenshots/koding/1.png",
+    "./resources/screenshots/koding/2.png",
+    "./resources/screenshots/koding/3.png"
+  ],
+  "authorNick": "fatihacet"
 }
