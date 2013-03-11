@@ -39,23 +39,49 @@ class UMLGenerator extends JView
       menu     : =>
         "Hello Koding": ->
           callback: => @reset()
-        "Skinned Sequence Diagram": 
-          callback: => @openUML getSkinned()
+        "Sequence Diagram (skinned)": 
+          callback: => @openUML getSequence()
         "Class Diagram":
           callback: => @openUML getClass()
+        "Activity Diagram": 
+          callback: => @openUML getActivity()
+        "Use Case Diagram":
+          callback: => @openUML getUseCase()
+        "State Diagram":
+          callback: => @openUML getState()
+        "Scientific Chart": 
+          callback: => @openUML getChart()
     
     @header.addSubView @openTip = new KDCustomHTMLView
       partial     : "?"
       cssClass    : "editor-button uml-question-mark"
-      tooltip     : 
-        title     : "You can open saved .uml files <br /> by dragging over the editor."
-        placement : "bottom"
+      click       : =>
+        new KDModalView
+          title   : "About"
+          cssClass: "uml-generator-about"
+          overlay : yes
+          content : """
+            <h3>About UML</h3>
+            <p>
+              <strong>Unified Modeling Language (UML)</strong> is a standardized general-purpose modeling language in the field of object-oriented software engineering. 
+              The Unified Modeling Language includes a set of graphic notation techniques to create visual models of object-oriented software-intensive systems.
+            </p>
+            <p>
+              This application uses PlantUML as a service. You can find the details at <a href="http://d.pr/mxgO">PlantUML's home page</a>. If you need more documentation 
+              about PlantUML, you can download <a href="http://d.pr/f/wyeB">PlantUML Language Reference Guide</a>.
+            </p>
+            <h3>About Application</h3>
+            <p>Using this application, you can easily create and save UML diagrams to your Koding directory. UML diagrams will be saved under ~/Documents/UMLGenerator.
+            You can save UML code as well. Also you can regenerate your UML from your saved UML code by dragging .uml file over the editor. 
+            You can try sample UML codes by using "Sample UML Diagrams" menu button.</p>
+            <p>Feel free to fork and contribute on Github. <a href="http://d.pr/qQDn">Here</a> is the Github repo of the application.</p>
+          """
 
     @ace = options.ace
     
     @aceView = new KDView
     
-    @UMLImagePath = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmWZ4oYnKSSnEhW4mkBXUuGXjTXCBmr9pa_DnKXP9yg9WY0000"
+    @UMLImagePath = "https://api.koding.com/1.0/image.php?url=https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00"
     
     @sampleUMLImagePath = @UMLImagePath
     
@@ -104,8 +130,9 @@ class UMLGenerator extends JView
       fileName = "#{@inputFileName.getValue()}.jpg"
       @doKiteRequest """mkdir -p #{filePath} ; cd #{filePath} ; curl -o "#{fileName}" #{@UMLImagePath}""", (res) =>
         new KDNotificationView
-          type  : "mini"
-          title : "Your UML diagram has been saved!"
+          type     : "mini"
+          title    : "Your UML diagram has been saved!"
+          cssClass : "success"
           @openFolders()
       @saveDialog.hide()
       
@@ -115,8 +142,9 @@ class UMLGenerator extends JView
       fileName = "#{@inputFileName.getValue()}.uml"
       @doKiteRequest """mkdir -p #{filePath} ; cd #{filePath} ; echo #{FSHelper.escapeFilePath @editorSession.getValue()} > #{fileName}""", (res) =>
         new KDNotificationView
-          type  : "mini"
-          title : "Your UML code has been saved!"
+          type     : "mini"
+          cssClass : "success" 
+          title    : "Your UML code has been saved!"
           @openFolders()
         @saveDialog.hide()
         
@@ -129,9 +157,11 @@ class UMLGenerator extends JView
     ext = KD.utils.getFileExtension path
     if ext isnt "uml"
       return new KDNotificationView
+        type     : "mini"
+        cssClass : "error"
         title    : "Dropped item must have .uml extension"
         duration : 3000
-        type     : "mini"
+        
     else 
       @doKiteRequest "cat #{path}", (res) =>
         @openUML res
@@ -167,7 +197,7 @@ class UMLGenerator extends JView
 
     form.addSubView @inputFileName = inputFileName = new KDInputView
       label        : labelFileName
-      defaultValue : "sample-uml"
+      defaultValue : "my-uml"
       
     saveDialog.show()
     inputFileName.setFocus()
@@ -203,6 +233,8 @@ class UMLGenerator extends JView
       else 
         new KDNotificationView
           title    : "An error occured while processing your request, try again please!"
+          type     : "mini"
+          cssClass : "error"
           duration : 3000
           
   pistachio: ->

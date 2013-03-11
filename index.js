@@ -1,4 +1,4 @@
-// Compiled by Koding Servers at Sat Mar 09 2013 23:57:31 GMT-0800 (PST) in server time
+// Compiled by Koding Servers at Sun Mar 10 2013 23:10:57 GMT-0700 (PDT) in server time
 
 (function() {
 
@@ -6,7 +6,7 @@
 
 /* BLOCK STARTS /Source: /Users/fatihacet/Applications/UMLGenerator.kdapp/uml-samples.coffee */
 
-var getActivity, getClass, getHello, getSequence, getState, getUseCase;
+var getActivity, getChart, getClass, getHello, getSequence, getState, getUseCase;
 
 getHello = function() {
   return "  Developer -> Koding : Hello Koding\n\n  Developer <- Koding : Welcome to Koding\n  \n  Developer -> Friend : Join to awesome Koding\n  \n  Friend    -> Koding : Hello Koding\n  \n  Friend    <- Koding : Welcome to Koding\n  \n  Developer <- Friend : Awesome Koding is awesome";
@@ -30,6 +30,10 @@ getUseCase = function() {
 
 getState = function() {
   return "scale 600 width\n\n[*] -> State1\nState1 --> State2 : Succeeded\nState1 --> [*] : Aborted\nState2 --> State3 : Succeeded\nState2 --> [*] : Aborted\nstate State3 {\n  state \"Long State Name\" as long1\n  long1 : Just a test\n  [*] --> long1\n  long1 --> long1 : New Data\n  long1 --> ProcessData : Enough Data\n}\nState3 --> State3 : Failed\nState3 --> [*] : Succeeded / Save Result\nState3 --> [*] : Aborted";
+};
+
+getChart = function() {
+  return "@startjcckit(600,300)\ndata/curves = c1 c2 c3\ndata/c1/y = 1998 1999 2000 2001 2002\ndata/c1/x = 31 32 44 61 55\ndata/c2/y = 1998 1999 2000 2001 2002\ndata/c2/x = 54 59 50 31 38\ndata/c3/y = 1998 1999 2000 2001 2002\ndata/c3/x = 15  9  6  8  7\nbackground = 0xffffff\ndefaultCoordinateSystem/ticLabelFormat = %d\ndefaultCoordinateSystem/ticLabelAttributes/fontSize = 0.03\ndefaultCoordinateSystem/axisLabelAttributes/fontSize = 0.04\ndefaultCoordinateSystem/axisLabelAttributes/fontStyle = bold\nplot/coordinateSystem/xAxis/ = defaultCoordinateSystem/\nplot/coordinateSystem/xAxis/axisLabel =  \nplot/coordinateSystem/xAxis/ticLabelFormat = %d%% \nplot/coordinateSystem/xAxis/grid = true\nplot/coordinateSystem/xAxis/minimum = 0\nplot/coordinateSystem/xAxis/maximum = 100\nplot/coordinateSystem/yAxis/ = defaultCoordinateSystem/\nplot/coordinateSystem/yAxis/axisLabel = year\nplot/coordinateSystem/yAxis/minimum = 2002.5\nplot/coordinateSystem/yAxis/maximum = 1997.5\nplot/initialHintForNextCurve/className = jcckit.plot.PositionHint\nplot/initialHintForNextCurve/position = 0.15 0\ndefaultDefinition/symbolFactory/className = jcckit.plot.BarFactory\ndefaultDefinition/symbolFactory/stacked = true\ndefaultDefinition/symbolFactory/size = 0.07\ndefaultDefinition/symbolFactory/horizontalBars = true\ndefaultDefinition/symbolFactory/attributes/className = jcckit.graphic.BasicGraphicAttributes\ndefaultDefinition/symbolFactory/attributes/lineColor = 0\ndefaultDefinition/withLine = false\nplot/curveFactory/definitions = def1 def2 def3\nplot/curveFactory/def1/ = defaultDefinition/\nplot/curveFactory/def1/symbolFactory/attributes/fillColor = 0xcaff\nplot/curveFactory/def2/ = defaultDefinition/\nplot/curveFactory/def2/symbolFactory/attributes/fillColor = 0xffca00\nplot/curveFactory/def3/ = defaultDefinition/\nplot/curveFactory/def3/symbolFactory/attributes/fillColor = 0xa0ff80\nplot/legendVisible = false\n@endjcckit";
 };
 
 
@@ -130,6 +134,11 @@ UMLGenerator = (function(_super) {
             callback: function() {
               return _this.openUML(getState());
             }
+          },
+          "Scientific Chart": {
+            callback: function() {
+              return _this.openUML(getChart());
+            }
           }
         };
       }
@@ -137,9 +146,13 @@ UMLGenerator = (function(_super) {
     this.header.addSubView(this.openTip = new KDCustomHTMLView({
       partial: "?",
       cssClass: "editor-button uml-question-mark",
-      tooltip: {
-        title: "You can open saved .uml files <br /> by dragging over the editor.",
-        placement: "bottom"
+      click: function() {
+        return new KDModalView({
+          title: "About",
+          cssClass: "uml-generator-about",
+          overlay: true,
+          content: "<h3>About UML</h3>\n<p>\n  <strong>Unified Modeling Language (UML)</strong> is a standardized general-purpose modeling language in the field of object-oriented software engineering. \n  The Unified Modeling Language includes a set of graphic notation techniques to create visual models of object-oriented software-intensive systems.\n</p>\n<p>\n  This application uses PlantUML as a service. You can find the details at <a href=\"http://d.pr/mxgO\">PlantUML's home page</a>. If you need more documentation \n  about PlantUML, you can download <a href=\"http://d.pr/f/wyeB\">PlantUML Language Reference Guide</a>.\n</p>\n<h3>About Application</h3>\n<p>Using this application, you can easily create and save UML diagrams to your Koding directory. UML diagrams will be saved under ~/Documents/UMLGenerator.\nYou can save UML code as well. Also you can regenerate your UML from your saved UML code by dragging .uml file over the editor. \nYou can try sample UML codes by using \"Sample UML Diagrams\" menu button.</p>\n<p>Feel free to fork and contribute on Github. <a href=\"http://d.pr/qQDn\">Here</a> is the Github repo of the application.</p>"
+        });
       }
     }));
     this.ace = options.ace;
