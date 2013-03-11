@@ -1,4 +1,4 @@
-.uml-generator-header-view { height: 28px !important; }
+.uml-generator-header-view { height: 28px !important; border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
 .uml-generator-header-view .uml-generate-button { margin-left: 5px; }
 .uml-generator-image { overflow: auto; }
 .uml-generator-image img { padding: 10px; position: absolute; }
