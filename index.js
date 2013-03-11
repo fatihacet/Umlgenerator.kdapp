@@ -1,4 +1,4 @@
-// Compiled by Koding Servers at Sun Mar 10 2013 23:10:57 GMT-0700 (PDT) in server time
+// Compiled by Koding Servers at Mon Mar 11 2013 11:32:35 GMT-0700 (PDT) in server time
 
 (function() {
 
@@ -102,13 +102,10 @@ UMLGenerator = (function(_super) {
       },
       menu: function() {
         return {
-          "Hello Koding": function() {
-            var _this = this;
-            return {
-              callback: function() {
-                return _this.reset();
-              }
-            };
+          "Hello Koding": {
+            callback: function() {
+              return _this.reset();
+            }
           },
           "Sequence Diagram (skinned)": {
             callback: function() {
@@ -144,7 +141,7 @@ UMLGenerator = (function(_super) {
       }
     }));
     this.header.addSubView(this.openTip = new KDCustomHTMLView({
-      partial: "?",
+      partial: "",
       cssClass: "editor-button uml-question-mark",
       click: function() {
         return new KDModalView({

@@ -37,7 +37,7 @@ class UMLGenerator extends JView
       cssClass : "uml-samples-button editor-button"
       callback : => @reset()
       menu     : =>
-        "Hello Koding": ->
+        "Hello Koding": 
           callback: => @reset()
         "Sequence Diagram (skinned)": 
           callback: => @openUML getSequence()
@@ -53,7 +53,7 @@ class UMLGenerator extends JView
           callback: => @openUML getChart()
     
     @header.addSubView @openTip = new KDCustomHTMLView
-      partial     : "?"
+      partial     : ""
       cssClass    : "editor-button uml-question-mark"
       click       : =>
         new KDModalView

@@ -3,7 +3,7 @@
 .uml-generator-image { overflow: auto; }
 .uml-generator-image img { padding: 10px; position: absolute; }
 .uml-generator-drop-target, .uml-generator-loader-view { position: absolute; background: #000; opacity: 0.6; z-index: 500; }
-.uml-question-mark { position: relative; top: -25px; left: -253px; width: 7px; cursor: pointer; }
+.uml-question-mark { position: relative; top: -25px; left: -253px; width: 20px; height: 20px; background: url(https://koding.com/images/_kd.sprites.png) -258px -437px; cursor: pointer; }
 .uml-generate-button, .uml-samples-button, .uml-question-mark { float: right; }
 .uml-reset-button, .uml-save-code-button { margin-right: 5px; }
 .uml-generator-header-view .chevron { right: -11px !important; }
