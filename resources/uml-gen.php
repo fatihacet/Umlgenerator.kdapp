@@ -45,18 +45,18 @@ function encode64($c) {
      $str = ""; 
      $len = strlen($c); 
      for ($i = 0; $i < $len; $i+=3) { 
-            if ($i+2==$len) { 
-                  $str .= append3bytes(ord(substr($c, $i, 1)), ord(substr($c, $i+1, 1)), 0); 
-            } else if ($i+1==$len) { 
-                  $str .= append3bytes(ord(substr($c, $i, 1)), 0, 0); 
-            } else { 
-                  $str .= append3bytes(ord(substr($c, $i, 1)), ord(substr($c, $i+1, 1)), ord(substr($c, $i+2, 1))); 
-            } 
+        if ($i+2==$len) { 
+              $str .= append3bytes(ord(substr($c, $i, 1)), ord(substr($c, $i+1, 1)), 0); 
+        } else if ($i+1==$len) { 
+              $str .= append3bytes(ord(substr($c, $i, 1)), 0, 0); 
+        } else { 
+              $str .= append3bytes(ord(substr($c, $i, 1)), ord(substr($c, $i+1, 1)), ord(substr($c, $i+2, 1))); 
+        } 
      } 
      return $str; 
 } 
 
-$path = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/"; 
+$path = "https://koding.com/-/imageProxy?url=http://www.plantuml.com/plantuml/img/"; 
 
 $path .= encodep($_POST['img']); 
 
