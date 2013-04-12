@@ -42,14 +42,14 @@ class UMLGenerator extends JView
               The Unified Modeling Language includes a set of graphic notation techniques to create visual models of object-oriented software-intensive systems.
             </p>
             <p>
-              This application uses PlantUML as a service. You can find the details at <a href="http://d.pr/mxgO">PlantUML's home page</a>. If you need more documentation 
-              about PlantUML, you can download <a href="http://d.pr/f/wyeB">PlantUML Language Reference Guide</a>.
+              This application uses PlantUML as a service. You can find the details at <a href="http://d.pr/mxgO" target="_blank">PlantUML's home page</a>. If you need more documentation 
+              about PlantUML, you can download <a href="http://d.pr/f/wyeB" target="_blank">PlantUML Language Reference Guide</a>.
             </p>
             <h3>About Application</h3>
             <p>Using this application, you can easily create and save UML diagrams to your Koding directory. UML diagrams will be saved under ~/Documents/UMLGenerator.
             You can save UML code as well. Also you can regenerate your UML from your saved UML code by dragging .uml file over the editor. 
             You can try sample UML codes by using "Sample UML Diagrams" menu button.</p>
-            <p>Feel free to fork and contribute on Github. <a href="http://d.pr/qQDn">Here</a> is the Github repo of the application.</p>
+            <p>Feel free to fork and contribute on Github. <a href="http://d.pr/qQDn" target="_blank">Here</a> is the Github repo of the application.</p>
           """
           
     headerRight.addSubView samples = new KDButtonViewWithMenu
@@ -81,7 +81,7 @@ class UMLGenerator extends JView
     
     @aceView = new KDView
     
-    @UMLImagePath = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00"
+    @UMLImagePath = KD.utils.proxifyUrl "http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00"
     
     @sampleUMLImagePath = @UMLImagePath
     
@@ -216,7 +216,7 @@ class UMLGenerator extends JView
       cssClass : "uml-generator-loader-view"
     
     @doKiteRequest "curl -d img='#{@editorSession.getValue()}' https://acet.koding.com/.applications/umlgenerator/resources/uml-gen.php", (res) =>
-      document.getElementById("uml").setAttribute "src", res
+      document.getElementById("uml").setAttribute KD.utils.proxifyUrl "src", res
         
       @UMLImagePath = res
       KD.utils.wait 1000, => 
