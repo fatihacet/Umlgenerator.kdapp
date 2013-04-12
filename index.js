@@ -1,4 +1,4 @@
-// Compiled by Koding Servers at Mon Mar 11 2013 12:03:13 GMT-0700 (PDT) in server time
+// Compiled by Koding Servers at Thu Apr 11 2013 18:59:24 GMT-0700 (PDT) in server time
 
 (function() {
 
@@ -47,54 +47,60 @@ var UMLGenerator, nickname,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-KD.enableLogs();
-
 nickname = KD.whoami().profile.nickname;
 
 UMLGenerator = (function(_super) {
-
   __extends(UMLGenerator, _super);
 
-  function UMLGenerator(options) {
-    var _this = this;
+  function UMLGenerator(options, data) {
+    var about, generateButton, headerRight, resetButton, samples, saveButton, saveCodeButton,
+      _this = this;
+
     if (options == null) {
       options = {};
     }
     options.cssClass = "uml-generator";
-    UMLGenerator.__super__.constructor.call(this, options);
-    this.header = new KDHeaderView({
-      cssClass: "uml-generator-header-view",
-      type: "small"
+    UMLGenerator.__super__.constructor.call(this, options, data);
+    this.header = new KDView({
+      cssClass: "uml-generator-header-view"
     });
-    this.header.addSubView(this.resetButton = new KDButtonView({
+    this.header.addSubView(resetButton = new KDButtonView({
       title: "Reset",
       cssClass: "editor-button uml-reset-button",
       callback: function() {
         return _this.reset();
       }
     }));
-    this.header.addSubView(this.saveCodeButton = new KDButtonView({
+    this.header.addSubView(saveCodeButton = new KDButtonView({
       title: "Save Code",
       cssClass: "editor-button uml-save-code-button",
       callback: function() {
         return _this.saveCode();
       }
     }));
-    this.header.addSubView(this.saveButton = new KDButtonView({
+    this.header.addSubView(saveButton = new KDButtonView({
       title: "Save Output",
       cssClass: "editor-button uml-save-button",
       callback: function() {
         return _this.saveUML();
       }
     }));
-    this.header.addSubView(this.generateButton = new KDButtonView({
-      title: "Generate",
-      cssClass: "editor-button uml-generate-button",
-      callback: function() {
-        return _this.generateUML();
+    this.header.addSubView(headerRight = new KDView({
+      cssClass: "uml-generator-header-right"
+    }));
+    headerRight.addSubView(about = new KDCustomHTMLView({
+      partial: "",
+      cssClass: "editor-button uml-question-mark",
+      click: function() {
+        return new KDModalView({
+          title: "About",
+          cssClass: "uml-generator-about",
+          overlay: true,
+          content: "<h3>About UML</h3>\n<p>\n  <strong>Unified Modeling Language (UML)</strong> is a standardized general-purpose modeling language in the field of object-oriented software engineering. \n  The Unified Modeling Language includes a set of graphic notation techniques to create visual models of object-oriented software-intensive systems.\n</p>\n<p>\n  This application uses PlantUML as a service. You can find the details at <a href=\"http://d.pr/mxgO\" target=\"_blank\">PlantUML's home page</a>. If you need more documentation \n  about PlantUML, you can download <a href=\"http://d.pr/f/wyeB\" target=\"_blank\">PlantUML Language Reference Guide</a>.\n</p>\n<h3>About Application</h3>\n<p>Using this application, you can easily create and save UML diagrams to your Koding directory. UML diagrams will be saved under ~/Documents/UMLGenerator.\nYou can save UML code as well. Also you can regenerate your UML from your saved UML code by dragging .uml file over the editor. \nYou can try sample UML codes by using \"Sample UML Diagrams\" menu button.</p>\n<p>Feel free to fork and contribute on Github. <a href=\"http://d.pr/qQDn\" target=\"_blank\">Here</a> is the Github repo of the application.</p>"
+        });
       }
     }));
-    this.header.addSubView(this.samples = new KDButtonViewWithMenu({
+    headerRight.addSubView(samples = new KDButtonViewWithMenu({
       title: "Sample UML Codes",
       cssClass: "uml-samples-button editor-button",
       callback: function() {
@@ -140,21 +146,16 @@ UMLGenerator = (function(_super) {
         };
       }
     }));
-    this.header.addSubView(this.openTip = new KDCustomHTMLView({
-      partial: "",
-      cssClass: "editor-button uml-question-mark",
-      click: function() {
-        return new KDModalView({
-          title: "About",
-          cssClass: "uml-generator-about",
-          overlay: true,
-          content: "<h3>About UML</h3>\n<p>\n  <strong>Unified Modeling Language (UML)</strong> is a standardized general-purpose modeling language in the field of object-oriented software engineering. \n  The Unified Modeling Language includes a set of graphic notation techniques to create visual models of object-oriented software-intensive systems.\n</p>\n<p>\n  This application uses PlantUML as a service. You can find the details at <a href=\"http://d.pr/mxgO\">PlantUML's home page</a>. If you need more documentation \n  about PlantUML, you can download <a href=\"http://d.pr/f/wyeB\">PlantUML Language Reference Guide</a>.\n</p>\n<h3>About Application</h3>\n<p>Using this application, you can easily create and save UML diagrams to your Koding directory. UML diagrams will be saved under ~/Documents/UMLGenerator.\nYou can save UML code as well. Also you can regenerate your UML from your saved UML code by dragging .uml file over the editor. \nYou can try sample UML codes by using \"Sample UML Diagrams\" menu button.</p>\n<p>Feel free to fork and contribute on Github. <a href=\"http://d.pr/qQDn\">Here</a> is the Github repo of the application.</p>"
-        });
+    headerRight.addSubView(generateButton = new KDButtonView({
+      title: "Generate",
+      cssClass: "editor-button uml-generate-button",
+      callback: function() {
+        return _this.generateUML();
       }
     }));
     this.ace = options.ace;
     this.aceView = new KDView;
-    this.UMLImagePath = "https://api.koding.com/1.0/image.php?url=https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00";
+    this.UMLImagePath = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00";
     this.sampleUMLImagePath = this.UMLImagePath;
     this.sampleUMLCode = getHello();
     this.umlView = new KDView({
@@ -208,8 +209,10 @@ UMLGenerator = (function(_super) {
 
   UMLGenerator.prototype.saveUML = function() {
     var _this = this;
+
     return this.openSaveDialog(function() {
       var fileName, filePath;
+
       filePath = "/Users/" + nickname + "/Documents/UMLGenerator";
       fileName = "" + (_this.inputFileName.getValue()) + ".jpg";
       _this.lastSavedFilePath = filePath + "/" + fileName;
@@ -226,8 +229,10 @@ UMLGenerator = (function(_super) {
 
   UMLGenerator.prototype.saveCode = function() {
     var _this = this;
+
     return this.openSaveDialog(function() {
       var fileName, filePath;
+
       filePath = "/Users/" + nickname + "/Documents/UMLGenerator";
       fileName = "" + (_this.inputFileName.getValue()) + ".uml";
       _this.lastSavedFilePath = filePath + "/" + fileName;
@@ -251,6 +256,7 @@ UMLGenerator = (function(_super) {
   UMLGenerator.prototype.open = function(path) {
     var ext,
       _this = this;
+
     ext = KD.utils.getFileExtension(path);
     if (ext !== "uml") {
       return new KDNotificationView({
@@ -274,6 +280,7 @@ UMLGenerator = (function(_super) {
   UMLGenerator.prototype.openSaveDialog = function(callback) {
     var form, inputFileName, labelFileName, saveDialog, wrapper,
       _this = this;
+
     this.addSubView(this.saveDialog = saveDialog = new KDDialogView({
       cssClass: "save-as-dialog",
       duration: 200,
@@ -312,11 +319,12 @@ UMLGenerator = (function(_super) {
 
   UMLGenerator.prototype.generateUML = function() {
     var _this = this;
+
     this.loader.show();
     this.umlView.addSubView(this.loaderView = new KDView({
       cssClass: "uml-generator-loader-view"
     }));
-    return this.doKiteRequest("curl -d img='" + (this.editorSession.getValue()) + "' https://fatihacet.koding.com/.applications/umlgenerator/resources/uml-gen.php", function(res) {
+    return this.doKiteRequest("curl -d img='" + (this.editorSession.getValue()) + "' https://acet.koding.com/.applications/umlgenerator/resources/uml-gen.php", function(res) {
       document.getElementById("uml").setAttribute("src", res);
       _this.UMLImagePath = res;
       return KD.utils.wait(1000, function() {
@@ -329,6 +337,7 @@ UMLGenerator = (function(_super) {
   UMLGenerator.prototype.openFolders = function() {
     var docRoot, files, finderController, root, treeController,
       _this = this;
+
     root = "/Users/" + nickname;
     docRoot = "" + root + "/Documents";
     files = [root, docRoot, "" + docRoot + "/UMLGenerator"];
@@ -336,6 +345,7 @@ UMLGenerator = (function(_super) {
     treeController = finderController.treeController;
     return finderController.multipleLs(files, function(err, res) {
       var fsItems;
+
       fsItems = FSHelper.parseLsOutput(files, res);
       treeController.addNodes(fsItems);
       return treeController.selectNode(treeController.nodes[_this.lastSavedFilePath]);
@@ -344,18 +354,25 @@ UMLGenerator = (function(_super) {
 
   UMLGenerator.prototype.doKiteRequest = function(command, callback) {
     var _this = this;
+
     return KD.getSingleton('kiteController').run(command, function(err, res) {
+      var _ref, _ref1;
+
       if (!err) {
         if (callback) {
           return callback(res);
         }
       } else {
-        return new KDNotificationView({
+        new KDNotificationView({
           title: "An error occured while processing your request, try again please!",
           type: "mini",
           cssClass: "error",
           duration: 3000
         });
+        if ((_ref = _this.loader) != null) {
+          _ref.hide();
+        }
+        return (_ref1 = _this.loaderView) != null ? _ref1.destroy() : void 0;
       }
     });
   };
