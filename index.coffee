@@ -216,7 +216,7 @@ class UMLGenerator extends JView
       cssClass : "uml-generator-loader-view"
     
     @doKiteRequest "curl -d img='#{@editorSession.getValue()}' https://acet.koding.com/.applications/umlgenerator/resources/uml-gen.php", (res) =>
-      document.getElementById("uml").setAttribute KD.utils.proxifyUrl "src", res
+      document.getElementById("uml").setAttribute "src", KD.utils.proxifyUrl res
         
       @UMLImagePath = res
       KD.utils.wait 1000, => 
