@@ -1,11 +1,7 @@
-// Compiled by Koding Servers at Thu Apr 11 2013 18:59:24 GMT-0700 (PDT) in server time
-
+/* Compiled by KD on Wed May 29 2013 14:20:53 GMT+0000 (UTC) */
 (function() {
-
 /* KDAPP STARTS */
-
-/* BLOCK STARTS /Source: /Users/fatihacet/Applications/UMLGenerator.kdapp/uml-samples.coffee */
-
+/* BLOCK STARTS: /home/fatihacet/Applications/UMLGenerator.kdapp/app/uml-samples.coffee */
 var getActivity, getChart, getClass, getHello, getSequence, getState, getUseCase;
 
 getHello = function() {
@@ -35,14 +31,7 @@ getState = function() {
 getChart = function() {
   return "@startjcckit(600,300)\ndata/curves = c1 c2 c3\ndata/c1/y = 1998 1999 2000 2001 2002\ndata/c1/x = 31 32 44 61 55\ndata/c2/y = 1998 1999 2000 2001 2002\ndata/c2/x = 54 59 50 31 38\ndata/c3/y = 1998 1999 2000 2001 2002\ndata/c3/x = 15  9  6  8  7\nbackground = 0xffffff\ndefaultCoordinateSystem/ticLabelFormat = %d\ndefaultCoordinateSystem/ticLabelAttributes/fontSize = 0.03\ndefaultCoordinateSystem/axisLabelAttributes/fontSize = 0.04\ndefaultCoordinateSystem/axisLabelAttributes/fontStyle = bold\nplot/coordinateSystem/xAxis/ = defaultCoordinateSystem/\nplot/coordinateSystem/xAxis/axisLabel =  \nplot/coordinateSystem/xAxis/ticLabelFormat = %d%% \nplot/coordinateSystem/xAxis/grid = true\nplot/coordinateSystem/xAxis/minimum = 0\nplot/coordinateSystem/xAxis/maximum = 100\nplot/coordinateSystem/yAxis/ = defaultCoordinateSystem/\nplot/coordinateSystem/yAxis/axisLabel = year\nplot/coordinateSystem/yAxis/minimum = 2002.5\nplot/coordinateSystem/yAxis/maximum = 1997.5\nplot/initialHintForNextCurve/className = jcckit.plot.PositionHint\nplot/initialHintForNextCurve/position = 0.15 0\ndefaultDefinition/symbolFactory/className = jcckit.plot.BarFactory\ndefaultDefinition/symbolFactory/stacked = true\ndefaultDefinition/symbolFactory/size = 0.07\ndefaultDefinition/symbolFactory/horizontalBars = true\ndefaultDefinition/symbolFactory/attributes/className = jcckit.graphic.BasicGraphicAttributes\ndefaultDefinition/symbolFactory/attributes/lineColor = 0\ndefaultDefinition/withLine = false\nplot/curveFactory/definitions = def1 def2 def3\nplot/curveFactory/def1/ = defaultDefinition/\nplot/curveFactory/def1/symbolFactory/attributes/fillColor = 0xcaff\nplot/curveFactory/def2/ = defaultDefinition/\nplot/curveFactory/def2/symbolFactory/attributes/fillColor = 0xffca00\nplot/curveFactory/def3/ = defaultDefinition/\nplot/curveFactory/def3/symbolFactory/attributes/fillColor = 0xa0ff80\nplot/legendVisible = false\n@endjcckit";
 };
-
-
-/* BLOCK ENDS */
-
-
-
-/* BLOCK STARTS /Source: /Users/fatihacet/Applications/UMLGenerator.kdapp/index.coffee */
-
+/* BLOCK STARTS: /home/fatihacet/Applications/UMLGenerator.kdapp/app/main.coffee */
 var UMLGenerator, nickname,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -155,7 +144,7 @@ UMLGenerator = (function(_super) {
     }));
     this.ace = options.ace;
     this.aceView = new KDView;
-    this.UMLImagePath = "https://api.koding.com/1.0/image.php?url=http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00";
+    this.UMLImagePath = KD.utils.proxifyUrl("http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00");
     this.sampleUMLImagePath = this.UMLImagePath;
     this.sampleUMLCode = getHello();
     this.umlView = new KDView({
@@ -325,7 +314,7 @@ UMLGenerator = (function(_super) {
       cssClass: "uml-generator-loader-view"
     }));
     return this.doKiteRequest("curl -d img='" + (this.editorSession.getValue()) + "' https://acet.koding.com/.applications/umlgenerator/resources/uml-gen.php", function(res) {
-      document.getElementById("uml").setAttribute("src", res);
+      document.getElementById("uml").setAttribute("src", KD.utils.proxifyUrl(res));
       _this.UMLImagePath = res;
       return KD.utils.wait(1000, function() {
         _this.loader.hide();
@@ -378,24 +367,21 @@ UMLGenerator = (function(_super) {
   };
 
   UMLGenerator.prototype.pistachio = function() {
-    return "{{> this.header}}\n{{> this.baseView}}";
+    return "{{> this.header }}\n{{> this.baseView }}";
   };
 
   return UMLGenerator;
 
 })(JView);
+/* BLOCK STARTS: /home/fatihacet/Applications/UMLGenerator.kdapp/index.coffee */
+require(["ace/ace"], function(Ace) {
+  var umlGenerator;
 
-(function() {
-  return require(["ace/ace"], function(Ace) {
-    return appView.addSubView(new UMLGenerator({
-      ace: Ace
-    }));
+  umlGenerator = new UMLGenerator({
+    ace: Ace
   });
-})();
-
-
-/* BLOCK ENDS */
+  return appView.addSubView(umlGenerator);
+});
 
 /* KDAPP ENDS */
-
 }).call();

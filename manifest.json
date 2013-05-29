@@ -1,0 +1,42 @@
+{
+  "devMode": false,
+  "version": "1.0",
+  "name": "UMLGenerator",
+  "identifier": "com.koding.apps.umlgenerator",
+  "path": "~/Applications/UMLGenerator.kdapp",
+  "homepage": "fatihacet.koding.com/umlgenerator",
+  "author": "Fatih Acet",
+  "authorNick": "fatihacet",
+  "repository": "git://github.com/fatihacet/umlgenerator.kdapp.git",
+  "description": "UMLGenerator: Using this application, you can easily create and save UML diagrams to your Koding directory. UML diagrams will be saved under ~/Documents/UMLGenerator. You can save UML code as well. Also you can regenerate your UML from your saved UML code by dragging .uml file over the editor. You can try sample UML codes by using \"Sample UML Diagrams\" menu button.",
+  "category": "web-app",
+  "source": {
+    "blocks": {
+      "app": {
+        "files": [
+          "./app/uml-samples.coffee",
+          "./app/main.coffee",
+          "./index.coffee"
+        ]
+      }
+    },
+    "stylesheets": [
+      "./resources/style.css"
+    ]
+  },
+  "options": {
+    "type": "tab"
+  },
+  "icns": {
+    "128": "./resources/icon.128.png",
+    "160": "./resources/icon.160.png",
+    "256": "./resources/icon.256.png"
+  },
+  "screenshots": [
+    "./resources/screenshots/koding/1.png",
+    "./resources/screenshots/koding/2.png",
+    "./resources/screenshots/koding/3.png"
+  ],
+  "menu": [],
+  "fileTypes": ["uml"]
+}
