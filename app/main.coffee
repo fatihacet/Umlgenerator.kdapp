@@ -122,13 +122,10 @@ class UMLGenerator extends JView
     
     @dropTarget.on "drop", (e) =>
       @open e.originalEvent.dataTransfer.getData "Text"
-      
-    KD.getSingleton("windowController").registerListener
-      KDEventTypes : ["DragEnterOnWindow", "DragExitOnWindow"]
-      listener : @
-      callback : (pubInst, event) =>
-        @dropTarget.show()
-        @dropTarget.hide() if event.type is "drop"
+    
+    windowController = KD.getSingleton "windowController"
+    windowController.on "DragEnterOnWindow", => @dropTarget.show()
+    windowController.on "DragExitOnWindow" , => @dropTarget.hide()
       
   saveUML: ->
     @openSaveDialog =>
@@ -250,6 +247,6 @@ class UMLGenerator extends JView
           
   pistachio: ->
     """
-      {{> @header }}
-      {{> @baseView }}
+      {{> @header}}
+      {{> @baseView}}
     """
