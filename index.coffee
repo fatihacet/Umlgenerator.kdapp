@@ -3,3 +3,9 @@ require ["ace/ace"], (Ace) ->
     ace: Ace
   
   appView.addSubView umlGenerator
+  
+  menuItems   = [ "generate", "reset", "saveCode", "saveOutput", "doc", "about" ]
+  
+  menuItems.forEach (item) =>
+    eventName = "#{item}MenuItemClicked"
+    appView.on eventName, => umlGenerator.emit eventName

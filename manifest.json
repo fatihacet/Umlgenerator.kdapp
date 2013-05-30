@@ -1,6 +1,6 @@
 {
-  "devMode": false,
-  "version": "1.0",
+  "devMode": true,
+  "version": "0.3",
   "name": "UMLGenerator",
   "identifier": "com.koding.apps.umlgenerator",
   "path": "~/Applications/UMLGenerator.kdapp",
@@ -37,6 +37,41 @@
     "./resources/screenshots/koding/2.png",
     "./resources/screenshots/koding/3.png"
   ],
-  "menu": [],
+  "menu": [
+    {
+      "title": "Generate",
+      "eventName": "generate"
+    },
+    {
+      "title": "Reset",
+      "eventName": "reset"
+    },
+    {
+      "type": "separator"
+    },
+    {
+      "title": "Save Code",
+      "eventName": "saveCode"
+    },
+    {
+      "title": "Save Output",
+      "eventName": "saveOutput"
+    },
+    {
+      "type": "separator"
+    },
+    {
+      "title": "Samples",
+      "eventName": "samples"
+    },
+    {
+      "title": "Documentation",
+      "eventName": "doc"
+    },
+    {
+      "title": "About",
+      "eventName": "about"
+    }
+  ],
   "fileTypes": ["uml"]
 }
