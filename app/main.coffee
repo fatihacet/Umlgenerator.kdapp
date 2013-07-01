@@ -1,4 +1,5 @@
-{nickname}  = KD.whoami().profile
+{nickname} = KD.whoami().profile
+timestamp  = Date.now()
 
 class UMLGenerator extends JView
 
@@ -16,17 +17,13 @@ class UMLGenerator extends JView
     @on "docMenuItemClicked",        => @showDocumentation()
     @on "samplesMenuItemClicked",    => @showSamples()
      
-    @ace = options.ace
+    @ace                = options.ace
+    @UMLImagePath       = KD.utils.proxifyUrl "http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00"
+    @sampleUMLImagePath = @UMLImagePath  
+    @sampleUMLCode      = getHello()
     
-    @aceView = new KDView
-    
-    @UMLImagePath = KD.utils.proxifyUrl "http://www.plantuml.com/plantuml/img/SqajIyt9BqWjKj2rK_3EJydCIrUmKl18pSd9XtAvk5pWQcnq4Mh2KtEIytDJ5KgmAGGQvbQKcPgN0bJebP-P1rALM9vQ3D80KmrL00IuhKQe8Tfge4AurOueLYfa5iCS0G00"
-    
-    @sampleUMLImagePath = @UMLImagePath
-    
-    @sampleUMLCode = getHello()
-    
-    @umlView = new KDView
+    @aceView            = new KDView
+    @umlView            = new KDView
       cssClass : "uml-generator-image" 
       partial  : """
         <img id="uml" src="#{@UMLImagePath}" />
@@ -41,16 +38,17 @@ class UMLGenerator extends JView
       sizes     : [ "50%", null ]
       views     : [ @aceView, @umlView ]
       
-    @aceEditor = @ace.edit @aceView.domElement[0]
+    @aceEditor     = @ace.edit @aceView.domElement[0]
     @editorSession = @aceEditor.getSession()
     @editorSession.setMode  "ace/mode/text"
-    @aceEditor.setTheme     "ace/theme/monokai"
     @editorSession.setValue @sampleUMLCode
+    @aceEditor.setTheme     "ace/theme/monokai"
+    
     @aceEditor.commands.addCommand 
       name      : "find"
       bindKey   : 
-        win     : 'Ctrl-S'
-        mac     : 'Command-S'
+        win     : "Ctrl-S"
+        mac     : "Command-S"
       exec      : => @generateUML()
     
     @baseView.addSubView @dropTarget = new KDView
@@ -68,29 +66,27 @@ class UMLGenerator extends JView
       
   saveUML: ->
     @openSaveDialog =>
-      filePath           = "/Users/#{nickname}/Documents/UMLGenerator"
-      fileName           = "#{@inputFileName.getValue()}.jpg"
-      @lastSavedFilePath = filePath + "/" + fileName
+      filePath = "Documents/UMLGenerator"
+      fileName = "#{@inputFileName.getValue()}.jpg"
       @doKiteRequest """mkdir -p #{filePath} ; cd #{filePath} ; curl -o "#{fileName}" #{@UMLImagePath}""", (res) =>
         new KDNotificationView
           type     : "mini"
-          title    : "Your UML diagram has been saved!"
+          title    : "Your UML diagram has been saved into ~/Documents/UMLGenerator."
           cssClass : "success"
-          @openFolders()
-      @saveDialog.hide()
+        @saveDialog.hide()
       
   saveCode: ->
     @openSaveDialog =>
-      filePath           = "/Users/#{nickname}/Documents/UMLGenerator"
-      fileName           = "#{@inputFileName.getValue()}.uml"
-      @lastSavedFilePath = filePath + "/" + fileName
-      @doKiteRequest """mkdir -p #{filePath} ; cd #{filePath} ; echo #{FSHelper.escapeFilePath @editorSession.getValue()} > #{fileName}""", (res) =>
-        new KDNotificationView
-          type     : "mini"
-          cssClass : "success" 
-          title    : "Your UML code has been saved!"
-          @openFolders()
-        @saveDialog.hide()
+      filePath = "Documents/UMLGenerator"
+      fileName = "#{@inputFileName.getValue()}.uml"
+      @doKiteRequest "mkdir -p #{filePath} ; cd #{filePath}", (res) =>
+        file = FSHelper.createFileFromPath "#{filePath}/#{fileName}"
+        file.save @editorSession.getValue(), (err, res) =>
+          new KDNotificationView
+            type     : "mini"
+            cssClass : "success" 
+            title    : "Your UML code has been saved into ~/Documents/UMLGenerator."
+          @saveDialog.hide()
         
   reset: ->
     @editorSession.setValue @sampleUMLCode
@@ -189,18 +185,6 @@ class UMLGenerator extends JView
   showSamples: ->
     # TODO: Implement this method again.
         
-  openFolders: ->
-    root     = "/Users/#{nickname}"
-    docRoot  = "#{root}/Documents"
-    files    = [root, docRoot, "#{docRoot}/UMLGenerator"]
-
-    finderController = KD.getSingleton('finderController')
-    {treeController} = finderController
-    finderController.multipleLs files, (err, res) =>
-      fsItems = FSHelper.parseLsOutput files, res
-      treeController.addNodes fsItems
-      treeController.selectNode treeController.nodes[@lastSavedFilePath]
-    
   doKiteRequest: (command, callback) ->
     KD.getSingleton('kiteController').run command, (err, res) =>
       unless err
