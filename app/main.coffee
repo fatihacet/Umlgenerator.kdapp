@@ -179,12 +179,12 @@ class UMLGenerator extends JView
       
   showDocumentation: ->
     new KDNotificationView
-      title: "Documentation will ne added soon!"
+      title: "Documentation will be added soon!"
       type : "mini"
       
   showSamples: ->
     new KDNotificationView
-      title: "Sample diagrams will ne added soon!"
+      title: "Sample diagrams will be added soon!"
       type : "mini"
         
   doKiteRequest: (command, callback) ->
