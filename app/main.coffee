@@ -147,7 +147,7 @@ class UMLGenerator extends JView
     @umlView.addSubView @loaderView = new KDView
       cssClass : "uml-generator-loader-view"
     
-    @doKiteRequest """wget -qO- --post-data="img=#{@editorSession.getValue().replace /[\r\n]/g, "\\n"}" http://vm-1.acet.kd.io/uml-gen.php/uml-gen.php""", (res) =>
+    @doKiteRequest """wget -qO- --post-data="img=#{@editorSession.getValue().replace /[\r\n]/g, "\\n"}" http://#{KD.getSingleton("vmController").defaultVmName}/.applications/umlgenerator/resources/uml-gen.php""", (res) =>
       document.getElementById("uml").setAttribute "src", KD.utils.proxifyUrl res
         
       @UMLImagePath = res
