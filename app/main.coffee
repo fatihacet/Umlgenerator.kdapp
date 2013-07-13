@@ -183,7 +183,9 @@ class UMLGenerator extends JView
       type : "mini"
       
   showSamples: ->
-    # TODO: Implement this method again.
+    new KDNotificationView
+      title: "Sample diagrams will ne added soon!"
+      type : "mini"
         
   doKiteRequest: (command, callback) ->
     KD.getSingleton('kiteController').run command, (err, res) =>
