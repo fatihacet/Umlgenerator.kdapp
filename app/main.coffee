@@ -62,20 +62,7 @@ class UMLGenerator extends JView
     windowController.on "DragEnterOnWindow", => @dropTarget.show()
     windowController.on "DragExitOnWindow" , => @dropTarget.hide()
     
-    hookFile = FSHelper.createFileFromPath "Web/.applications/umlgen-hook.php"
-    hookFile.save UMLGenerator.hookFileContent, (err, res) ->
-      if err
-        modal = new KDBlockingModalView
-          title        : "Something wrong"
-          overlay      : yes
-          content      : "<p>Sorry but, UMLGenerator app couldn't create hook file that will help you to create UML diagrams. This means you cannot save your UML diagrams. You can report this issue to app author.</p>"
-          buttons      : 
-            OK         :
-              title    : "Close the app"
-              cssClass : "clean-gray"
-              callback : -> 
-                appManager = KD.getSingleton "appManager"
-                appManager.quit appManager.frontApp
+    @createHookFile()
     
   saveUML: ->
     @openSaveDialog =>
@@ -160,7 +147,7 @@ class UMLGenerator extends JView
     @umlView.addSubView @loaderView = new KDView
       cssClass : "uml-generator-loader-view"
     
-    @doKiteRequest """wget -qO- --post-data="img=#{@editorSession.getValue().replace /[\r\n]/g, "\\n"}" http://#{defaultVmName}/.applications/umlgen-hook.php""", (res) =>
+    @doKiteRequest """wget -qO- --post-data="img=#{@editorSession.getValue().replace /[\r\n]/g, "\\n"}" http://#{defaultVmName}/.applications/umlgen/umlgen-hook.php""", (res) =>
       document.getElementById("uml").setAttribute "src", KD.utils.proxifyUrl res
         
       @UMLImagePath = res
@@ -212,6 +199,23 @@ class UMLGenerator extends JView
           duration : 3000
         @loader?.hide()
         @loaderView?.destroy()
+        
+  createHookFile: ->
+    @doKiteRequest "mkdir -p Web/.applications/umlgen", (res) ->
+      hookFile = FSHelper.createFileFromPath "Web/.applications/umlgen/umlgen-hook.php"
+      hookFile.save UMLGenerator.hookFileContent, (err, res) ->
+        if err
+          modal = new KDBlockingModalView
+            title        : "Something wrong"
+            overlay      : yes
+            content      : "<p>Sorry but, UMLGenerator app couldn't create hook file that will help you to create UML diagrams. This means you cannot save your UML diagrams. You can report this issue to app author.</p>"
+            buttons      : 
+              OK         :
+                title    : "Close the app"
+                cssClass : "clean-gray"
+                callback : -> 
+                  appManager = KD.getSingleton "appManager"
+                  appManager.quit appManager.frontApp
           
   pistachio: ->
     """
@@ -280,7 +284,7 @@ function encode64($c) {
 $path = "https://koding.com/-/imageProxy?url=http://www.plantuml.com/plantuml/img/"; 
 
 
-$path .= encodep(str_replace('\n', "\n", $_POST['img'])); 
+$path .= encodep(str_replace('\\n', "\\n", $_POST['img'])); 
 
 echo $path;
 
