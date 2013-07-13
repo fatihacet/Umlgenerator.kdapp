@@ -94,7 +94,7 @@ class UMLGenerator extends JView
     @UMLImagePath = @sampleUMLImagePath
     
   open: (path) ->
-    ext = KD.utils.getFileExtension path
+    ext = FSFile.getFileExtension path
     if ext isnt "uml"
       return new KDNotificationView
         type     : "mini"
@@ -102,8 +102,8 @@ class UMLGenerator extends JView
         title    : "Dropped item must have .uml extension"
         duration : 3000
         
-    else 
-      @doKiteRequest "cat #{path}", (res) =>
+    else
+      @doKiteRequest "cat #{FSHelper.plainPath path}", (res) =>
         @openUML res
         
   openUML: (umlCode) ->
