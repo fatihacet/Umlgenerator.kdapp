@@ -1,3 +1,4 @@
+@startuml
 autonumber "<b>[000]"
 Bob -> Alice : Authentication Request
 Bob <- Alice : Authentication Response
@@ -9,3 +10,4 @@ Bob <- Alice : Another authentication Response
 autonumber 40 10 "<font color=red><b>Message 0  "
 Bob -> Alice : Yet another authentication Request
 Bob <- Alice : Yet another authentication Response
+@enduml
