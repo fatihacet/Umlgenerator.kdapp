@@ -1,9 +1,10 @@
-This file is used by the TestProxy unit test. It contains 2 diagrams description.
-
 @startuml
-Bob -> Alice : hello
-@enduml
+(*) -left-> "this <size:20>activity</size>
+	is <b>very</b> <color:red>long2</color>
+	and defined on several lines
+	that contains many <i>text</i>" as A1
 
-@startuml
-version
+-up-> "Another activity\n on several lines"
+
+A1 --> "Short activity <img:sourceforge.jpg>"
 @enduml
