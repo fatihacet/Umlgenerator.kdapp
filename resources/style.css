@@ -1,0 +1,107 @@
+.umlgen-notification {
+  top: 55px !important;
+}
+.umlgen-view {
+  overflow: scroll;
+  background: #FFF;
+}
+.umlgen-view .uml {
+  margin: 10px;
+}
+.umlgen-view .kdloader {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -24px 0 0 -24px;
+}
+.umlgenerator .kdsplitview-resizer {
+   display: none; 
+}
+.umlgenerator .panel-1 .kdsplitview-resizer {
+  display: block;
+}
+.umlgenerator .workspace .file-container .vm {
+  border-top: none;
+}
+.umlgenerator .inner-header {
+  background: #282F31 !important;
+  border-bottom: 2px solid #1E2527 !important;
+}
+.umlgenerator .inner-header .title {
+  font-size: 18px;
+  color: #aeb8c2;
+  line-height: 36px;
+  margin-left: 10px;
+}
+.umlgenerator .file-container .jtreeview-wrapper {
+  width: 256px !important;
+}
+.umlgenerator .pulsing.loading {
+  width: 461px;
+  height: 220px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -80px 0 0 -190px;
+}
+.umlgen-landing {
+  font-size: 20px;
+  font-weight: 100;
+  width: auto;
+  text-align: center;
+  height: 80px;
+  margin-top: 40px;
+}
+.umlgenerator .close-link {
+  display: block;
+  font-size: 11px;
+  color: #888;
+  margin-top: 10px;
+  text-align: right;
+  position: relative;
+  right: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.umlgen-sample-item p {
+  margin-top: 5px;
+  text-align: center;
+  color: #666;
+  font-size: 15px;
+  font-weight: 100;
+}
+.umlgen-sample-item {
+  width: 200px;
+  height: 190px;
+  display: inline-block;
+  margin: 0px -20px 0px 30px;
+  cursor: pointer;
+}
+.umlgen-sample-item img {
+  width: 200px;
+  height: 150px;
+}
+.umlgenerator .samples-container {
+  height: auto;
+}
+.uml-generator-about h3 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 10px;
+}
+.uml-generator-about p {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+.uml-generator-about a {
+  color: #333;
+}
+.uml-generator-about h3 {
+  margin-top: 40px;
+}
+.uml-generator-about h3:first-child {
+  margin-top: 0;
+}
