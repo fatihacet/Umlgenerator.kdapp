@@ -95,15 +95,24 @@ class UmlgeneratorMainView extends KDView
 
     contents = @ace.getContents()
     @preview.generate contents
-    @file.save contents, (err, response) =>
-      title      = "#{@file.name} is saved."
-      cssClass   = "success umlgen-notification"
 
+    saveOptions =
+      path      : "/home/#{KD.nick()}/Documents/UMLGenerator"
+      vmName    : KD.getSingleton("vmController").defaultVmName
+
+    FSHelper.createRecursiveFolder saveOptions, (err, res) =>
       if err
-        title    = "Couldn't save #{@file.name}, try again!"
-        cssClass = "error umlgen-notification"
+        return @showNotification "Couldn't create folder Documents/UMLGenerator", "error"
 
-      @showNotification title, cssClass
+      @file.save contents, (err, response) =>
+        title      = "#{@file.name} is saved."
+        cssClass   = "success umlgen-notification"
+
+        if err
+          title    = "Couldn't save #{@file.name}, try again!"
+          cssClass = "error umlgen-notification"
+
+        @showNotification title, cssClass
 
   saveUML: ->
     @createDummyFile()  unless @file

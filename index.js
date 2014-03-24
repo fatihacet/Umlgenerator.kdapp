@@ -1,4 +1,4 @@
-/* Compiled by kdc on Mon Mar 24 2014 01:29:57 GMT+0000 (UTC) */
+/* Compiled by kdc on Mon Mar 24 2014 01:59:58 GMT+0000 (UTC) */
 (function() {
 /* KDAPP STARTS */
 /* BLOCK STARTS: /home/fatihacet/Applications/Umlgenerator.kdapp/compress.js */
@@ -1875,22 +1875,31 @@ UmlgeneratorMainView = (function(_super) {
   };
 
   UmlgeneratorMainView.prototype.saveCode = function() {
-    var contents,
+    var contents, saveOptions,
       _this = this;
     if (!this.file) {
       this.createDummyFile();
     }
     contents = this.ace.getContents();
     this.preview.generate(contents);
-    return this.file.save(contents, function(err, response) {
-      var cssClass, title;
-      title = "" + _this.file.name + " is saved.";
-      cssClass = "success umlgen-notification";
+    saveOptions = {
+      path: "/home/" + (KD.nick()) + "/Documents/UMLGenerator",
+      vmName: KD.getSingleton("vmController").defaultVmName
+    };
+    return FSHelper.createRecursiveFolder(saveOptions, function(err, res) {
       if (err) {
-        title = "Couldn't save " + _this.file.name + ", try again!";
-        cssClass = "error umlgen-notification";
+        return _this.showNotification("Couldn't create folder Documents/UMLGenerator", "error");
       }
-      return _this.showNotification(title, cssClass);
+      return _this.file.save(contents, function(err, response) {
+        var cssClass, title;
+        title = "" + _this.file.name + " is saved.";
+        cssClass = "success umlgen-notification";
+        if (err) {
+          title = "Couldn't save " + _this.file.name + ", try again!";
+          cssClass = "error umlgen-notification";
+        }
+        return _this.showNotification(title, cssClass);
+      });
     });
   };
 
