@@ -19,10 +19,10 @@ You can save UML code as well. Also you can regenerate your UML from your saved 
 Feel free to fork and contribute :)
 
 
-To use the app go to Koding https://koding.com/Umlgenerator
+Click [here](https://koding.com/Umlgenerator) to use this app at Koding.
 
 ## Screenshots
 
-![](https://raw.github.com/fatihacet/UMLGenerator.kdapp/master/resources/screenshots/github/1.png)
+![](https://raw.github.com/fatihacet/UMLGenerator.kdapp/new-devtools/resources/screenshots/github/1.png)
 
-![](https://raw.github.com/fatihacet/UMLGenerator.kdapp/master/resources/screenshots/github/2.png)
+![](https://raw.github.com/fatihacet/UMLGenerator.kdapp/new-devtools/resources/screenshots/github/2.png)
